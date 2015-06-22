@@ -19,24 +19,6 @@ graph = {'a':['h', 'l'],
          '2':['g','i','k','o'],
          '3':['h','j','l']}
 
-graphSet = {'a':set(['h', 'l']),
-         'b':set(['k', 'm', 'i']),
-         'c':set(['f','j','l','n']),
-         'd':set(['g','m','o']),
-         'e':set(['h','n']),
-         'f':set(['c','m','1']),
-         'g':set(['d','n','2']),
-         'h':set(['a','e','k','o','1','3']),
-         'i':set(['b','l','2']),
-         'j':set(['c','m','3']),
-         'k':set(['b','h','2']),
-         'l':set(['a','c','i','3']),
-         'm':set(['b','d','f','j']),
-         'n':set(['c','e','g','1']),
-         'o':set(['d','h','2']),
-         '1':set(['f','h','n']),
-         '2':set(['g','i','k','o']),
-         '3':set(['h','j','l'])}
 # vowel list
 vowels = ['a','e','i','o']
 nodes = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','1','2','3']
@@ -51,29 +33,38 @@ def getEdges(graph):
     return edges
 
 # currently no vowel constraints
-def getPossiblePaths(graph, start, n, limit, visited, total):
+def getPossiblePaths(graph, start, n, limit, visited, total, vCount):
     visited.append(start)
     if(n == limit):
-        #print(visited)
-        total.append(visited)
+        if(countVowels(visited) <= 2):
+            print(visited) 
+            total.append(visited)
         visited.pop()
         return
     for p in graph[start]:
-        getPossiblePaths(graph, p, n + 1, limit, visited, total)
+        getPossiblePaths(graph, p, n + 1, limit, visited, total, vCount) 
     visited.pop()
     return
-        
+
+def countVowels(path):
+    count = 0
+    for letter in path:
+        if letter in vowels:
+            count+=1
+    return count
+
 """ Main Function and Conditional """
 def main():
     #edgeList = getEdges(graph)
     emptyList = []
     totalList = []
-    n = 3
+    n = 10
     for start in nodes:
-        getPossiblePaths(graph, start, 1, n, emptyList, totalList)
+        getPossiblePaths(graph, start, 1, n, emptyList, totalList, 0)
     print(len(totalList))
-    validPaths = []
+    #getPossiblePaths(graph, 'a', 1, n, emptyList, totalList, 0)
     """
+    validPaths = []
     for path in totalList:
         #print(path)
         vowelCount = 0
